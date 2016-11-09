@@ -438,6 +438,12 @@ class ProxyThread implements Runnable {
 			    }
 
 				try {
+					// Here is where the magic happens, I tested myself an I see that actually the images are displayed individually,
+					// try to go to google then type something like "beaches" in my case the following behavior happens:
+					// First iteration the layout with the words are display (the images' caption is display only)
+					// then again this method is called so this "writeHttpResponse" is called once again but now the most lef top image
+					// is render after the method is done.
+					// there are as many iteration like the above describe  as image to display
 					writeHttpResponse(msg, httpOut);
 				} catch (IOException e) {
 					StringBuilder strBuilder = new StringBuilder(200);
