@@ -63,6 +63,9 @@
 
 package org.parosproxy.paros.core.proxy;
 
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
@@ -79,6 +82,8 @@ import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -112,7 +117,7 @@ class ProxyThread implements Runnable {
 
     private static final String BAD_GATEWAY_RESPONSE_STATUS = "502 Bad Gateway";
     private static final String GATEWAY_TIMEOUT_RESPONSE_STATUS = "504 Gateway Timeout";
-    
+     
 	// change httpSender to static to be shared among proxies to reuse keep-alive connections
 
 	protected ProxyServer parentServer = null;
@@ -316,12 +321,47 @@ class ProxyThread implements Runnable {
         msg.getResponseHeader().addHeader(HttpHeader.CONTENT_LENGTH, Integer.toString(message.length()));
         msg.getResponseHeader().addHeader(HttpHeader.CONTENT_TYPE, "text/plain; charset=UTF-8");
     }
-
+    
     private static void writeHttpResponse(HttpMessage msg, HttpOutputStream outputStream) throws IOException {
+    	
         outputStream.write(msg.getResponseHeader());
         outputStream.flush();
 
         if (msg.getResponseBody().length() > 0) {
+        	
+        	// Magic starts here -> 
+            /* This method basically scan if there is a image content, then I cover the body (I had to clone it because it is a reference and the documentation mentioned that is immutable).
+             * Then I convert the cloned reference to a BufferedImage which allow to manipulate the image with the methods in library AffineTransform, then I convert again BufferedImage to 
+             * byte[] which will be used to set the new ResponseBody.
+             * 
+             * Bug: now the image is flipped but there are some missing image's parts in the bottom, I am not sure what the problem is. I guess it is the methods used to transform 
+             * BufferedImage to byte[] 
+             */
+            if (msg.getResponseHeader().getHeader("Content-Type").startsWith("image/")){
+            	String extension = msg.getResponseHeader().getHeader("Content-Type").substring(msg.getResponseHeader().getHeader("Content-Type").lastIndexOf("/") + 1);
+            		
+            	//convert byte[] to BufferedImage
+            	byte imageReference[] = msg.getResponseBody().getBytes().clone();
+            	ByteArrayInputStream imageValue = new ByteArrayInputStream(imageReference);
+            	BufferedImage imageInBuffered = ImageIO.read(imageValue);
+            		
+            	//Flip the image
+            	AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
+            	tx.translate(0, -imageInBuffered.getHeight(null));
+            	AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+            	imageInBuffered = op.filter(imageInBuffered, null);
+            		
+            	//convert BufferedImage to byte[]
+            	ByteArrayOutputStream ouput = new ByteArrayOutputStream();
+            	ImageIO.write(imageInBuffered, extension, ouput );
+            	ouput.flush();
+            	byte[] imageInByte = ouput.toByteArray();
+            	ouput.close();
+            		
+            	//set the flipped image to the body
+            	msg.setResponseBody(imageInByte);
+        	}
+
             outputStream.write(msg.getResponseBody().getBytes());
             outputStream.flush();
         }
@@ -445,6 +485,7 @@ class ProxyThread implements Runnable {
 					// is render after the method is done.
 					// there are as many iteration like the above describe  as image to display
 					writeHttpResponse(msg, httpOut);
+					//writeHttpResponse(msg, null);
 				} catch (IOException e) {
 					StringBuilder strBuilder = new StringBuilder(200);
 					strBuilder.append("Failed to write/forward the HTTP response to the client: ");
