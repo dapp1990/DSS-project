@@ -12,3 +12,9 @@ This repo contains the report and code used for this project
 In the wiki you can find additional information as well as usefull links.
 
 - [Wiki](https://github.com/dapp1990/DSS-project/wiki)
+
+### OWASP Zap Developer Group
+
+An active group of techies experienced in OWASP Zap extension coding
+
+- [Developer Group](https://groups.google.com/forum/#!forum/zaproxy-develop)
