@@ -63,9 +63,15 @@
 
 package org.parosproxy.paros.core.proxy;
 
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
+import java.awt.image.ImageProducer;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
@@ -84,6 +90,7 @@ import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
 import javax.imageio.ImageIO;
+import javax.swing.GrayFilter;
 
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -105,6 +112,8 @@ import org.zaproxy.zap.PersistentConnectionListener;
 import org.zaproxy.zap.ZapGetMethod;
 import org.zaproxy.zap.extension.api.API;
 import org.zaproxy.zap.network.HttpRequestBody;
+
+import java.lang.instrument.Instrumentation;
 
 
 class ProxyThread implements Runnable {
@@ -330,7 +339,7 @@ class ProxyThread implements Runnable {
         if (msg.getResponseBody().length() > 0) {
         	
         	// Magic starts here -> 
-            /* This method basically scan if there is a image content, then I cover the body (I had to clone it because it is a reference and the documentation mentioned that is immutable).
+            /* This method basically scans if there is a image content, then I cover the body (I had to clone it because it is a reference and the documentation mentioned that is immutable).
              * Then I convert the cloned reference to a BufferedImage which allow to manipulate the image with the methods in library AffineTransform, then I convert again BufferedImage to 
              * byte[] which will be used to set the new ResponseBody.
              * 
@@ -343,17 +352,50 @@ class ProxyThread implements Runnable {
             	//convert byte[] to BufferedImage
             	byte imageReference[] = msg.getResponseBody().getBytes().clone();
             	ByteArrayInputStream imageValue = new ByteArrayInputStream(imageReference);
-            	BufferedImage imageInBuffered = ImageIO.read(imageValue);
-            		
+            	BufferedImage imageInBuffer = ImageIO.read(imageValue);
+            	
+            	//enhancing image
+            	ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+            	ImageIO.write(imageInBuffer, extension, tmp);
+            	tmp.close();
+            	Integer contentLength = tmp.size();
+            	
+            	if(contentLength>100000){
+            		//Get the RGB value of the pixel.
+            		//Find the average of RGB i.e., Avg = (R+G+B)/3
+            		// Replace the R, G and B value of the pixel with average (Avg) calculated in step 2.
+            		/*
+            		ImageFilter filter = new GrayFilter(true,50);
+            		ImageProducer producer = new FilteredImageSource(imageInBuffer.getSource(),filter);
+            		Image mage = Toolkit.getDefaultToolkit().createImage(producer);
+            		imageInBuffer = mage.
+            		*/
+            		BufferedImage imgGray = new BufferedImage(imageInBuffer.getWidth(),imageInBuffer.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
+            		Graphics g = imgGray.getGraphics();
+            		g.drawImage(imageInBuffer, 0, 0, null);
+            		g.dispose();
+            		imageInBuffer = imgGray;
+            	}
+
             	//Flip the image
+            	/*
+            	AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
+            	tx.translate(0, -imageInBuffer.getHeight(null));
+            	AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+            	imageInBuffer = op.filter(imageInBuffer, null);
+            	*/
+            	
+            	//Water mark the image
+            	/*
             	AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
             	tx.translate(0, -imageInBuffered.getHeight(null));
             	AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
             	imageInBuffered = op.filter(imageInBuffered, null);
-            		
+            	*/
+            	
             	//convert BufferedImage to byte[]
             	ByteArrayOutputStream ouput = new ByteArrayOutputStream();
-            	ImageIO.write(imageInBuffered, extension, ouput );
+            	ImageIO.write(imageInBuffer, extension, ouput );
             	ouput.flush();
             	byte[] imageInByte = ouput.toByteArray();
             	ouput.close();
