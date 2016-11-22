@@ -115,6 +115,9 @@ import org.zaproxy.zap.network.HttpRequestBody;
 
 import java.lang.instrument.Instrumentation;
 
+import com.gif4j.Watermark;
+import com.gif4j.TextPainter;
+
 
 class ProxyThread implements Runnable {
 
@@ -364,12 +367,7 @@ class ProxyThread implements Runnable {
             		//Get the RGB value of the pixel.
             		//Find the average of RGB i.e., Avg = (R+G+B)/3
             		// Replace the R, G and B value of the pixel with average (Avg) calculated in step 2.
-            		/*
-            		ImageFilter filter = new GrayFilter(true,50);
-            		ImageProducer producer = new FilteredImageSource(imageInBuffer.getSource(),filter);
-            		Image mage = Toolkit.getDefaultToolkit().createImage(producer);
-            		imageInBuffer = mage.
-            		*/
+            		
             		BufferedImage imgGray = new BufferedImage(imageInBuffer.getWidth(),imageInBuffer.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
             		Graphics g = imgGray.getGraphics();
             		g.drawImage(imageInBuffer, 0, 0, null);
@@ -386,6 +384,16 @@ class ProxyThread implements Runnable {
             	*/
             	
             	//Water mark the image
+            	String watermarkText = "Watermark"
+                TextPainter textPainter = new TextPainter(new Font("Verdana", Font.BOLD, 18));
+                textPainter.setOutlinePaint(Color.WHITE);
+                //render the specified text outlined
+                BufferedImage renderedWatermarkText = textPainter.renderString(watermarkText,true);
+                //create new Watermark
+                Watermark watermark = new Watermark(renderedWatermarkText, Watermark.LAYOUT_BOTTOM_RIGHT);
+                //apply watermark to the specified image and return the result
+                watermark.apply(imageInBuffer);
+            	
             	/*
             	AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
             	tx.translate(0, -imageInBuffered.getHeight(null));
