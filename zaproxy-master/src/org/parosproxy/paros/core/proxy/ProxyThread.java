@@ -63,6 +63,8 @@
 
 package org.parosproxy.paros.core.proxy;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -73,8 +75,10 @@ import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageFilter;
 import java.awt.image.ImageProducer;
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
+import java.io.FileReader;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -115,8 +119,8 @@ import org.zaproxy.zap.network.HttpRequestBody;
 
 import java.lang.instrument.Instrumentation;
 
-import com.gif4j.Watermark;
-import com.gif4j.TextPainter;
+import com.gif4j.*;
+//import com.gif4j.TextPainter;
 
 
 class ProxyThread implements Runnable {
@@ -341,65 +345,26 @@ class ProxyThread implements Runnable {
 
         if (msg.getResponseBody().length() > 0) {
         	
-        	// Magic starts here -> 
-            /* This method basically scans if there is a image content, then I cover the body (I had to clone it because it is a reference and the documentation mentioned that is immutable).
-             * Then I convert the cloned reference to a BufferedImage which allow to manipulate the image with the methods in library AffineTransform, then I convert again BufferedImage to 
-             * byte[] which will be used to set the new ResponseBody.
-             * 
-             * Bug: now the image is flipped but there are some missing image's parts in the bottom, I am not sure what the problem is. I guess it is the methods used to transform 
-             * BufferedImage to byte[] 
-             */
             if (msg.getResponseHeader().getHeader("Content-Type").startsWith("image/")){
             	String extension = msg.getResponseHeader().getHeader("Content-Type").substring(msg.getResponseHeader().getHeader("Content-Type").lastIndexOf("/") + 1);
-            		
+            	
             	//convert byte[] to BufferedImage
             	byte imageReference[] = msg.getResponseBody().getBytes().clone();
             	ByteArrayInputStream imageValue = new ByteArrayInputStream(imageReference);
             	BufferedImage imageInBuffer = ImageIO.read(imageValue);
             	
-            	//enhancing image
-            	ByteArrayOutputStream tmp = new ByteArrayOutputStream();
-            	ImageIO.write(imageInBuffer, extension, tmp);
-            	tmp.close();
-            	Integer contentLength = tmp.size();
-            	
-            	if(contentLength>100000){
-            		//Get the RGB value of the pixel.
-            		//Find the average of RGB i.e., Avg = (R+G+B)/3
-            		// Replace the R, G and B value of the pixel with average (Avg) calculated in step 2.
-            		
-            		BufferedImage imgGray = new BufferedImage(imageInBuffer.getWidth(),imageInBuffer.getHeight(),BufferedImage.TYPE_BYTE_GRAY);
-            		Graphics g = imgGray.getGraphics();
-            		g.drawImage(imageInBuffer, 0, 0, null);
-            		g.dispose();
-            		imageInBuffer = imgGray;
+            	FileReader fr = new FileReader("resources/config.txt");
+            	BufferedReader textReader = new BufferedReader(fr);
+            	            	
+            	while(textReader.ready()){
+            		switch (textReader.readLine()){
+            		case "watermark": imageInBuffer = ImageProcessor.applyWatermark(imageInBuffer); break;
+            		case "enhance": imageInBuffer = ImageProcessor.enhanceImage(extension, imageInBuffer); break;
+            		case "flip": imageInBuffer = ImageProcessor.flipImage(imageInBuffer); break;
+            		default: throw new IllegalArgumentException();
+            		}
             	}
-
-            	//Flip the image
-            	/*
-            	AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
-            	tx.translate(0, -imageInBuffer.getHeight(null));
-            	AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-            	imageInBuffer = op.filter(imageInBuffer, null);
-            	*/
-            	
-            	//Water mark the image
-            	String watermarkText = "Watermark"
-                TextPainter textPainter = new TextPainter(new Font("Verdana", Font.BOLD, 18));
-                textPainter.setOutlinePaint(Color.WHITE);
-                //render the specified text outlined
-                BufferedImage renderedWatermarkText = textPainter.renderString(watermarkText,true);
-                //create new Watermark
-                Watermark watermark = new Watermark(renderedWatermarkText, Watermark.LAYOUT_BOTTOM_RIGHT);
-                //apply watermark to the specified image and return the result
-                watermark.apply(imageInBuffer);
-            	
-            	/*
-            	AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
-            	tx.translate(0, -imageInBuffered.getHeight(null));
-            	AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-            	imageInBuffered = op.filter(imageInBuffered, null);
-            	*/
+            	textReader.close();
             	
             	//convert BufferedImage to byte[]
             	ByteArrayOutputStream ouput = new ByteArrayOutputStream();
@@ -416,6 +381,8 @@ class ProxyThread implements Runnable {
             outputStream.flush();
         }
     }
+
+	
 	
 	protected void processHttp(HttpRequestHeader requestHeader, boolean isSecure) throws IOException {
 
