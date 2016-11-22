@@ -63,17 +63,7 @@
 
 package org.parosproxy.paros.core.proxy;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.awt.image.FilteredImageSource;
-import java.awt.image.ImageFilter;
-import java.awt.image.ImageProducer;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -94,7 +84,6 @@ import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
 import javax.imageio.ImageIO;
-import javax.swing.GrayFilter;
 
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -116,12 +105,6 @@ import org.zaproxy.zap.PersistentConnectionListener;
 import org.zaproxy.zap.ZapGetMethod;
 import org.zaproxy.zap.extension.api.API;
 import org.zaproxy.zap.network.HttpRequestBody;
-
-import java.lang.instrument.Instrumentation;
-
-import com.gif4j.*;
-//import com.gif4j.TextPainter;
-
 
 class ProxyThread implements Runnable {
 
