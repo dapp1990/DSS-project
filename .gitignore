@@ -49,3 +49,5 @@ local.properties
 # Code Recommenders
 .recommenders/
 DSSReport/.texpadtmp
+
+zaproxy-master/gif4j_pro_trial_2.3.jar
