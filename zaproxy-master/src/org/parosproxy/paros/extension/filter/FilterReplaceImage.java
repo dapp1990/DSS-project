@@ -13,11 +13,12 @@ public class FilterReplaceImage extends FilterAdaptor {
 	@Override
 	public String getName() {
 		// TODO We should use the Constant.messages.getString() method to be coherent with zaproxy
-		return "This is a fancy name";
+		return "Filter Image";
 	}
 
 	@Override
 	public void onHttpRequestSend(HttpMessage httpMessage) {
+		//Array 
 		// TODO Auto-generated method stub
 
 	}

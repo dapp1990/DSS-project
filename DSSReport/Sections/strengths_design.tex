@@ -1,0 +1,10 @@
+\subsection{Iteration 1 \& 2: Image Filtering}
+\subsection{Iteration 3: Content Filtering}
+\subsection{Iteration 4: Content Reporting}
+The extension is encapsulated in its package and only relies in the interfaces provides by zaproxy. Due to the Strategy pattern applied for the image statistics, developers can create new concrete classes either using the template class or implementing a new one. Developers can also remove specific type of statistics easily.
+
+\subsection{Iteration 5: Refactoring}
+
+\subsubsection{org.parosproxy.paros.core.proxy.ProxyThread}
+
+Due to the template class \textit{ProxyListenerNotifier}, developers can create new notification method using the concrete class without affecting the behavior of the others. The \textit{notification} package can also be reused in other parts of the code since it does not depends on \textit{ProxyThread}. 

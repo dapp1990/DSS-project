@@ -1,0 +1,17 @@
+\subsection{Iteration 1 \& 2: Image Filtering}
+\subsection{Iteration 3: Content Filtering}
+\subsection{Iteration 4: Content Reporting}
+It was created a new package to be consistent with the naming that zaproxy has. The package \textit{org.zaproxy.zap.extension.imgreport} encapsulates the classes used for the extension. The main \textit{ExtensionImageReport} extends \textit{ExtensionAdaptor} (creates, initializes and hooks a new extension), \textit{XmlReporterExtension} (gets our XML format which will be added to the zaproxy report extension) and \textit{HttpSenderListener} (converts our new extension in an observer object which is able to catch all the HttpMessages).
+\par
+\textit{ExtensionImageReport} instantiates and stores new concrete classes of \textit{ImageStatistics}, validates whether \textit{HttpMessage} content is an image content, stores \textit{HttpImage} objects and delegate the creation of specific statistics format to the \textit{ImageStatistics} classes. 
+\par
+\textit{HttpImage} processes \textit{HttpMessage} and returns the corresponding object.
+\par
+\textit{ImageDimensionStatistics} is an implementation of \textit{ImageStatistics} that contains a XML template format used by \textit{ImageHeightStatistics}, \textit{ImageSizeStatistics} and \textit{ImageWidthStatistics}. \textit{ImageTypeStatistics} is an implementation of \textit{ImageStatistics} that creates a unique XML format.
+\par
+This ImageExtension was implemented as core functionality since the given XML format to the ReportExtension relies on XSL style sheets to add the new information in HTML and MarkDown reports thus those corresponding XSL files were properly updated.
+
+\subsection{Iteration 5: Refactoring}
+\subsubsection{org.parosproxy.paros.core.proxy.ProxyThread}
+
+\textit{Response} was created to handle the errors messages while\textit{notification} package was created to delegate all the notification method used in \textit{ProxyThread}. Due to the similarity in the algorithm, it was implemented using an abstract template class and the internal behavior was implemented in the concrete classes.
