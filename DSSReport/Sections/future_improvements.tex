@@ -7,7 +7,7 @@ Instead, we could improve by adding input fields (potentially a tuple <priority,
 \subsection{Iteration 3: Content Filtering}
 An alternative with lower coupling in \textit{FilterApplyer} would be by sending a closure from one class to the next one and never returning results. \textit{FilterApplyer} would no longer collect everything but would simply pass on the filter method with 2 missing arguments. This should take 5 hours to implement well.
 \subsection{Iteration 4: Content Reporting}
-The current implementation does not allow the final user to select the specific image statistic type in the report. Next improvement considers a GUI implementation using the \textit{hook} abstract method provide by \textit{ExtensionAdaptor}. \textit{ImageStatisticsFactory} can be adapted to add those responsibilities: keep tracking the final user image statistic type selections and instantiating/removing the corresponding \textit{ImageStatistics} classes in runtime. This would take 10 hours.
+The current implementation does not allow the final user to select the specific image statistic type in the report. Next improvement considers a GUI implementation using the \textit{hook} abstract method provided by \textit{ExtensionAdaptor}. \textit{ImageStatisticsFactory} can be adapted to add those responsibilities: keep tracking the final user image statistic type selections and instantiating/removing the corresponding \textit{ImageStatistics} classes in runtime. This would take 10 hours.
 
 \subsection{Iteration 5: Refactoring}
 \subsubsection{org.parosproxy.paros.core.proxy.ExtensionLoader}
