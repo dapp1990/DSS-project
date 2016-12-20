@@ -7,7 +7,7 @@ Splitting responsibilities increased cohesion of these classes. \textit{FilterHt
 The only class with relatively high coupling is \textit{FilterApplyer}.
 Due to the high cohesion, the classes are easy to understand and modify. Support for various extensions is also provided with some generic typing and abstract super classes.
 \subsection{Iteration 4: Content Reporting}
-The extension is encapsulated in its package and relies in the interfaces provides by zaproxy. Due to the Strategy pattern applied for the image statistics, developers can create new concrete classes either using the template class or implementing a new one. Developers can select specific image statistics types via the \textit{ImageStatisticsFactory}.
+The extension is encapsulated in its package and relies on the interfaces provides by zaproxy. Due to the strategy pattern applied for the image statistics, developers can create new concrete classes either using the template class or implementing a new one. Developers can select specific image statistics types via the \textit{ImageStatisticsFactory}.
 
 \subsection{Iteration 5: Refactoring}
 \subsubsection{org.parosproxy.paros.core.proxy.ProxyThread}
