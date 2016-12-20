@@ -1,4 +1,5 @@
 \subsection{Iteration 1 \& 2: Image Filtering}
+\textit{Configurationreader} could be equipped with a richer parsing mechanism that would have an error margin on the parsed names, for example: case insensitivity and trimming.
 \subsection{Iteration 3: Content Filtering}
 \subsection{Iteration 4: Content Reporting}
 The current implementation does not allow the final user to select the specific image statistic type in the report. Next improvement considers a GUI implementation using the \textit{hook} abstract method provide by \textit{ExtensionAdaptor}. \textit{ImageStatisticsFactory} can be adapted to add those responsibilities: keep tracking the final user image statistic type selections and instantiating/removing the corresponding ImageStatistics classes in runtime.
