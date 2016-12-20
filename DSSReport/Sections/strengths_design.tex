@@ -4,7 +4,7 @@
 The extension is encapsulated in its package and only relies in the interfaces provides by zaproxy. Due to the Strategy pattern applied for the image statistics, developers can create new concrete classes either using the template class or implementing a new one. Developers can also remove specific type of statistics easily.
 
 \subsection{Iteration 5: Refactoring}
-We also made a minor improvement to methods going over all extensions. They now use a for-each (over the private list) rather than an indexed for-loop and the public 'getExtension(i)'. The order will be preserved so the behavior is the same.
+
 \subsubsection{org.parosproxy.paros.core.proxy.ProxyThread}
 
 Due to the template class \textit{ProxyListenerNotifier}, developers can create new notification method using the concrete class without affecting the behavior of the others. The \textit{notification} package can also be reused in other parts of the code since it does not depends on \textit{ProxyThread}. 
