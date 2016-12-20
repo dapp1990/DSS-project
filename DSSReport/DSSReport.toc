@@ -12,6 +12,7 @@
 \contentsline {subsection}{\numberline {2.3}Iteration 4: Content Reporting}{4}{subsection.2.3}
 \contentsline {subsection}{\numberline {2.4}Iteration 5: Refactoring}{4}{subsection.2.4}
 \contentsline {subsubsection}{\numberline {2.4.1}org.parosproxy.paros.core.proxy.ProxyThread}{4}{subsubsection.2.4.1}
+\contentsline {subsubsection}{\numberline {2.4.2}org.parosproxy.paros.core.proxy.ProxyThread}{4}{subsubsection.2.4.2}
 \contentsline {section}{\numberline {3}Weaknesses of the design}{5}{section.3}
 \contentsline {subsection}{\numberline {3.1}Iteration 1 \& 2: Image Filtering}{5}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}Iteration 3: Content Filtering}{5}{subsection.3.2}
