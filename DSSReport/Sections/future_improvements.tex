@@ -1,6 +1,6 @@
 \subsection{Iteration 1 \& 2: Image Filtering}
 \subsection{Iteration 3: Content Filtering}
 \subsection{Iteration 4: Content Reporting}
-The current implementation does not allow the final user to select the specific image statistic type in the report. Next improvement considers a GUI implementation using the \textit{hook} abstract method provide by \textit{ExtensionAdaptor}. This implies the creation of a new \textit{ImageStatisticsMaganer} class which responsibilities will be keeping track the final user image statistic type selections and instantiating/removing the corresponding ImageStatistics classes in runtime. \textit{ExtensionImageReport} will call this manager to get the XML images statistics formats. A new call indirection is created while the image statistics tasks in \textit{ExtensionImageReport} are delegated to \textit{ImageStatisticsMaganer}, hence the responsibilities and cohesion are maintain in expert classes. 
+The current implementation does not allow the final user to select the specific image statistic type in the report. Next improvement considers a GUI implementation using the \textit{hook} abstract method provide by \textit{ExtensionAdaptor}. \textit{ImageStatisticsFactory} can be adapted to add those responsibilities: keep tracking the final user image statistic type selections and instantiating/removing the corresponding ImageStatistics classes in runtime.
 
 \subsection{Iteration 5: Refactoring}
