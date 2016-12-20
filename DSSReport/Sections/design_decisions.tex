@@ -31,10 +31,12 @@ This \textit{ExtensionImageReport} was implemented as core functionality since t
 
 \subsection{Iteration 5: Refactoring}
 \subsubsection{org.parosproxy.paros.core.proxy.ExtensionLoader}
-We first tackled the massive code duplication in  the \textit{ExtensionLoader} class. Most of the time, we used Java 8's support for lambda expressions and closures.
+We first tackled the massive code duplication in  the \textit{ExtensionLoader} class. Most of the time, we used Java 8's support for lambda expressions and closures. Next we split off 3 components from the \textit{ExtensionLoader} that took over distinct responsibilities: \textit{MenuHandler}, \textit{ExtensionList} and \textit{HookProxyLinkerManager}.
 All JMenu related methods moved from \textit{ExtensionLoader} to \textit{MenuHandler}. This relieves the \textit{ExtensionLoader} from a responsibility unrelated to its main concerns, improbing cohesion.
 We applied the proxy pattern and extracted the extension list and the extension map from the \textit{ExtensionLoader}. Instead, the \textit{ExtensionLoader} has an \textit{ExtensionList} field. \textit{ExtensionList} encapsulate both the list and the map. It provides most methods to manipulate them.
 We also made a minor improvement to methods going over all extensions. They now use a for-each (over the private list) rather than an indexed for-loop and the public 'getExtension(i)'. The order is preserved so the behavior is the same.
+The \textit{HookProxyLinkerManager} handles the linking of \textit{ExtensionHooks} to the \textit{Proxy}, or to the \textit{SiteMapPanel} in one case, via the corresponding (proxy) listeners. It does so by managing \textit{HookProxyLinkers} and providing methods to interact with them.
+A (subclass of a) \textit{HookProxyLinker} encapsulates all operations for (un)linking an \textit{ExtensionHooks} to the \textit{Proxy}. Reflection greatly reduced the parameter passing and code duplication. It was better than closure passing in this case, due to the repetitive names of the methods called in \textit{ExtensionHook} and \textit{Proxy}.
 patterns: factory?
 \subsubsection{org.parosproxy.paros.core.proxy.ProxyThread}
 
