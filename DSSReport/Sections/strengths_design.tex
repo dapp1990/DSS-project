@@ -1,5 +1,8 @@
 \subsection{Iteration 1 \& 2: Image Filtering}
 \subsection{Iteration 3: Content Filtering}
+Splitting responsibilities increased cohesion of these classes. \textit{FilterHttpContent} only handles messages now and does a basic check before sending the work to the \textit{FilterApplyer}. This one coordinates the preparative tasks and does the actual filtering with the collected results. Then it returns the result to \textit{FilterHttpContent}, but it could also set it itself.
+The only class with relatively high coupling is \textit{FilterApplyer}.
+Due to the high cohesion, the classes are easy to understand and modify. Support for various extension is also provided with some generic typing and abstract super classes.
 \subsection{Iteration 4: Content Reporting}
 The extension is encapsulated in its package and relies in the interfaces provides by zaproxy. Due to the Strategy pattern applied for the image statistics, developers can create new concrete classes either using the template class or implementing a new one. Developers can select specific image statistics types via the \textit{ImageStatisticsFactory}.
 
