@@ -1,15 +1,23 @@
 \subsection{Iteration 1 \& 2: Image Filtering}
+
+
 \subsection{Iteration 3: Content Filtering}
+We separated the distinct responsibilities among several (object) classes. \textit{FilterHttpContent} is the link to the restof ZAP. It extends \textit{FilterAdaptor} in the parosproxy filter package. Upon receiving an HTTP response, it only verifies the \textit{HttpMessage} has content. Then it instantiates a \textit{FilterApplyer} (concrete subclass) and calls one of its filtering methods with 2 parameters. Currently only one is available, but other methods can be added to offer various filtering algorithms. The 2 parameters are the \textit{HttpMessage} and the url of the file containing the filter terms and additional info.
+The \textit{FilterApplyer} then instantiates 2 helpers. One, a \textit{PageContent}, represents a given (upon creation) \textit{HttpMessage}'s content. Subclasses provide the content with the desired type, \textit{String} for the assignment. The other, a \textit{FormatFileToFilterInfo}, parses the file at given url and returns the useful information. Currently only one parsing method is available, that supports the format of the assignment and returns a \textit{Pair}. This pair consists of the weight threshold and a list of \textit{InappropriateElement} instances. \textit{InappropriateElement} models inappropriate content, of generic type, its weight and explanatory tags. To support different formats, other parsing methods can be added.
+Next, the \textit{FilterApplyer} combines both result and filters the content using the found inappropriate elements.
+An alternative with lower coupling would be by sending a closure from one class to the next one and never returning results.
 \subsection{Iteration 4: Content Reporting}
-It was created a new package to be consistent with the naming that zaproxy has. The package \textit{org.zaproxy.zap.extension.imgreport} encapsulates the classes used for the extension. The main \textit{ExtensionImageReport} extends \textit{ExtensionAdaptor} (creates, initializes and hooks a new extension), \textit{XmlReporterExtension} (gets our XML format which will be added to the zaproxy report extension) and \textit{HttpSenderListener} (converts our new extension in an observer object which is able to catch all the HttpMessages).
+It was created a new package to be consistent with the naming that zaproxy has. The package \textit{org.zaproxy.zap.extension.imgreport} encapsulates the classes used for the extension. The class \textit{ExtensionImageReport} extends \textit{ExtensionAdaptor} (creates, initializes and hooks a new extension), \textit{XmlReporterExtension} (gets our XML format which will be added to the zaproxy report extension) and \textit{HttpSenderListener} (converts our new extension in an observer object which is able to catch all the HttpMessages).
 \par
-\textit{ExtensionImageReport} instantiates and stores new concrete classes of \textit{ImageStatistics}, validates whether \textit{HttpMessage} content is an image content, stores \textit{HttpImage} objects and delegate the creation of specific statistics format to the \textit{ImageStatistics} classes. 
+\textit{ExtensionImageReport} validates whether \textit{HttpMessage} content is an image content, stores \textit{HttpImage} objects and delegate the creation of specific statistics format to the \textit{ImageStatistics} classes. 
+\par
+\textit{ImageStatisticsFactory} instantiates new concrete classes of \textit{ImageStatistics}.
 \par
 \textit{HttpImage} processes \textit{HttpMessage} and returns the corresponding object.
 \par
-\textit{ImageDimensionStatistics} is an implementation of \textit{ImageStatistics} that contains a XML template format used by \textit{ImageHeightStatistics}, \textit{ImageSizeStatistics} and \textit{ImageWidthStatistics}. \textit{ImageTypeStatistics} is an implementation of \textit{ImageStatistics} that creates a unique XML format.
+\textit{ImageDimensionStatistics} is an template class implementation of \textit{ImageStatistics} used by \textit{ImageHeightStatistics}, \textit{ImageSizeStatistics} and \textit{ImageWidthStatistics}. \textit{ImageTypeStatistics} is an implementation of \textit{ImageStatistics} that creates a unique XML format.
 \par
-This ImageExtension was implemented as core functionality since the given XML format to the ReportExtension relies on XSL style sheets to add the new information in HTML and MarkDown reports thus those corresponding XSL files were properly updated.
+This \textit{ExtensionImageReport} was implemented as core functionality since the given XML format to the ReportExtension relies on XSL style sheets to add the new information in HTML and MarkDown reports thus those corresponding XSL files were properly updated.
 
 \subsection{Iteration 5: Refactoring}
 \subsubsection{org.parosproxy.paros.core.proxy.ProxyThread}
