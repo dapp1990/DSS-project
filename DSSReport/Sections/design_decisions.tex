@@ -1,4 +1,12 @@
 \subsection{Iteration 1 \& 2: Image Filtering}
+We concluded that the best way to add this new functionalities was creating a new instantiation of  \textit{FilterAdapter}.
+\par
+Because we were constrained by the external configuration file, \textit{FilterReplaceImage} operates as the coordinator between the  \textit{ConfigurationReader} and the concrete implementations of \textit{SimpleImageFilter}.
+\par
+\textit{ConfigurationReader} is implemented as a factory class. It parses the configuration file and creates instance of \textit{SimpleImageFilter} accordingly.
+\par
+One of the important design decisions was that the configuration file contains the name of the concrete classes of  \textit{SimpleImageFilter} and  the order in which the filter are applied is established by the same order of the configuration file.
+\par
 For iteration 1 and 2, we added a zap filter by extending \textit{FilterAdaptor}. The subclass is \textit{FilterReplaceImage} and overrides the textit{onHttpResponseReceive} method. \textit{FilterAdaptor}. \textit{FilterReplaceImage} extracts the \textit{BufferedImage} from the \textit{HttpMessage}. It finds all the filter operations to apply and passes the \textit{BufferedImage} on to each of them in turn to be modified.
 The actual filters are subclasses of \textit{SimpleImageFilter}. The \textit{ConfigurationReader} finds them, given the url of the config file.
 

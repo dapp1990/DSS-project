@@ -1,4 +1,6 @@
 \subsection{Iteration 1 \& 2: Image Filtering}
+\textit{SimpleImageFilter} was implemented over the strategy pattern, allowing easy new implementations of a new possible image filters.
+
 \subsection{Iteration 3: Content Filtering}
 Splitting responsibilities increased cohesion of these classes. \textit{FilterHttpContent} only handles messages now and does a basic check before sending the work to the \textit{FilterApplyer}. This one coordinates the preparative tasks and does the actual filtering with the collected results. Then it returns the result to \textit{FilterHttpContent}, but it could also set it itself.
 The only class with relatively high coupling is \textit{FilterApplyer}.

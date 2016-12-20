@@ -1,4 +1,6 @@
 \subsection{Iteration 1 \& 2: Image Filtering}
+A proposed improvement is adding input fields (potentially a tuple <priority, filterType>) in the \textit{FilterReplaceImage} in order to do the configuration using the GUI provided by zaproxy. \textit{ConfigurationReader} now is updated to a new factory class which creates and removes instances of \textit{SimpleImageFilter} according with the final user configuration. The configuration file is no longer need, therefore the coupling in the name classes disappears.
+
 \textit{Configurationreader} could be equipped with a richer parsing mechanism that would have an error margin on the parsed names, for example: case insensitivity and trimming.
 \subsection{Iteration 3: Content Filtering}
 \subsection{Iteration 4: Content Reporting}
