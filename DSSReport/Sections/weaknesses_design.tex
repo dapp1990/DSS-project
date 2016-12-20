@@ -4,6 +4,8 @@
 The extension can add the new images statistics to the XML report in a straightforward way but it is not the case for HTML and MarkDown reports which are highly coupled to the XSL files. Whenever new XML image statistics format is created in the ImageExtension, the XSL files must be modified; the main issue is that those classes/files are not even directly related, making difficult to convert this \textit{ImageExtension} into an add-on plugin.
 
 \subsection{Iteration 5: Refactoring}
+\subsubsection{org.parosproxy.paros.core.proxy.ExtensionLoader}
+\textit{ExtensionList} is does not cover all interactions with the wrapped list. It still provides a method getExtensions, which breaks its role as a proxy.
 \subsubsection{org.parosproxy.paros.core.proxy.ProxyThread}
 
 \textit{ProxyThread} still has to create the concrete notification classes and stores them in a data structure. Hence the responsibilities were turned from calling internal methods to managing \textit{ProxyListenerNotifier} classes.
