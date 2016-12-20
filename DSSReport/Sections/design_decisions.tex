@@ -28,7 +28,6 @@ We applied the proxy pattern and extracted the extension list and the extension 
 We also made a minor improvement to methods going over all extensions. They now use a for-each (over the private list) rather than an indexed for-loop and the public 'getExtension(i)'. The order is preserved so the behavior is the same.
 The \textit{HookProxyLinkerManager} handles the linking of \textit{ExtensionHooks} to the \textit{Proxy}, or to the \textit{SiteMapPanel} in one case, via the corresponding (proxy) listeners. It does so by managing \textit{HookProxyLinkers} and providing methods to interact with them.
 A (subclass of a) \textit{HookProxyLinker} encapsulates all operations for (un)linking an \textit{ExtensionHooks} to the \textit{Proxy}. Reflection greatly reduced the parameter passing and code duplication. It was better than closure passing in this case, due to the repetitive names of the methods called in \textit{ExtensionHook} and \textit{Proxy}.
-patterns: factory?
 \subsubsection{org.parosproxy.paros.core.proxy.ProxyThread}
 
 \textit{Response} was created to handle the errors messages while\textit{notification} package was created to delegate all the notification method used in \textit{ProxyThread}. Due to the similarity in the algorithm, it was implemented using an abstract template class and the internal behavior was implemented in the concrete classes.
