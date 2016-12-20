@@ -1,14 +1,6 @@
 \subsection{Iteration 1 \& 2: Image Filtering}
-We concluded that the best way to add this new functionalities was creating a new instantiation of  \textit{FilterAdapter}.
-\par
-Because we were constrained by the external configuration file, \textit{FilterReplaceImage} operates as the coordinator between the  \textit{ConfigurationReader} and the concrete implementations of \textit{SimpleImageFilter}.
-\par
-\textit{ConfigurationReader} is implemented as a factory class. It parses the configuration file and creates instance of \textit{SimpleImageFilter} accordingly.
-\par
-One of the important design decisions was that the configuration file contains the name of the concrete classes of  \textit{SimpleImageFilter} and  the order in which the filter are applied is established by the same order of the configuration file.
-\par
-For iteration 1 and 2, we added a zap filter by extending \textit{FilterAdaptor}. The subclass is \textit{FilterReplaceImage} and overrides the textit{onHttpResponseReceive} method. \textit{FilterAdaptor}. \textit{FilterReplaceImage} extracts the \textit{BufferedImage} from the \textit{HttpMessage}. It finds all the filter operations to apply and passes the \textit{BufferedImage} on to each of them in turn to be modified.
-The actual filters are subclasses of \textit{SimpleImageFilter}. The \textit{ConfigurationReader} finds them, given the url of the config file.
+For iteration 1 and 2, we added a zap filter by extending \textit{FilterAdaptor}. The subclass is \textit{FilterReplaceImage} and overrides the \textit{onHttpResponseReceive} method. \textit{FilterAdaptor}. \textit{FilterReplaceImage} extracts the \textit{BufferedImage} from the \textit{HttpMessage}. It finds all the filter operations to apply and passes the \textit{BufferedImage} on to each of them in turn to be modified.
+The actual filters are subclasses of \textit{SimpleImageFilter}. The \textit{ConfigurationReader} is a file reader and a factory class for \textit{SimpleImageFilter}. Given the url of the config file, it reads the file names and instantiates concrete subclasses.
 
 \subsection{Iteration 3: Content Filtering}
 We separated the distinct responsibilities among several (object) classes. \textit{FilterHttpContent} is the link to the restof ZAP. It extends \textit{FilterAdaptor} in the parosproxy filter package. Upon receiving an HTTP response, it only verifies the \textit{HttpMessage} has content. Then it instantiates a \textit{FilterApplyer} (concrete subclass) and calls one of its filtering methods with 2 parameters. Currently only one is available, but other methods can be added to offer various filtering algorithms. The 2 parameters are the \textit{HttpMessage} and the url of the file containing the filter terms and additional info.
