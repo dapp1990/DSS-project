@@ -1,5 +1,6 @@
 \subsection{Iteration 1 \& 2: Image Filtering}
 \subsection{Iteration 3: Content Filtering}
+We separated the distinct responsibilities among several (object) classes. \textit{FilterHttpContent} is the link to the restof ZAP. It extends \textit{FilterAdaptor} in the parosproxy filter package. 
 \subsection{Iteration 4: Content Reporting}
 It was created a new package to be consistent with the naming that zaproxy has. The package \textit{org.zaproxy.zap.extension.imgreport} encapsulates the classes used for the extension. The main \textit{ExtensionImageReport} extends \textit{ExtensionAdaptor} (creates, initializes and hooks a new extension), \textit{XmlReporterExtension} (gets our XML format which will be added to the zaproxy report extension) and \textit{HttpSenderListener} (converts our new extension in an observer object which is able to catch all the HttpMessages).
 \par
@@ -10,8 +11,11 @@ It was created a new package to be consistent with the naming that zaproxy has. 
 \textit{ImageDimensionStatistics} is an implementation of \textit{ImageStatistics} that contains a XML template format used by \textit{ImageHeightStatistics}, \textit{ImageSizeStatistics} and \textit{ImageWidthStatistics}. \textit{ImageTypeStatistics} is an implementation of \textit{ImageStatistics} that creates a unique XML format.
 \par
 This ImageExtension was implemented as core functionality since the given XML format to the ReportExtension relies on XSL style sheets to add the new information in HTML and MarkDown reports thus those corresponding XSL files were properly updated.
-
+Patterns: factory
 \subsection{Iteration 5: Refactoring}
+We first tackled the rampant code duplication in  the \textit{ExtensionLoader} class. Most of the time, we used Java 8's support for lambda expressions and closures: \textit{Function<T1, T2>} and \textit{Consumer<T>} (for void methods).
+We also made a minor improvement to methods going over all extensions. They now use a for-each (over the private list) rather than an indexed for-loop and the public 'getExtension(i)'. The order will be preserved so the behavior is the same.
+patterns: factory?, proxy for extension list
 \subsubsection{org.parosproxy.paros.core.proxy.ProxyThread}
 
 \textit{Response} was created to handle the errors messages while\textit{notification} package was created to delegate all the notification method used in \textit{ProxyThread}. Due to the similarity in the algorithm, it was implemented using an abstract template class and the internal behavior was implemented in the concrete classes.
