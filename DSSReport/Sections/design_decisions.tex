@@ -22,6 +22,7 @@ This \textit{ExtensionImageReport} was implemented as core functionality since t
 \subsection{Iteration 5: Refactoring}
 \subsubsection{org.parosproxy.paros.core.proxy.ExtensionLoader}
 We first tackled the rampant code duplication in  the \textit{ExtensionLoader} class. Most of the time, we used Java 8's support for lambda expressions and closures: \textit{Function<T1, T2>} and \textit{Consumer<T>} (for void methods).
+We applied the proxy pattern extracted the extension list and the extension map from the \textit{ExtensionLoader}. Instead, the \textit{ExtensionLoader} has an \textit{ExtensionList} field. \textit{ExtensionList} encapsulate both the list and the map. It provides most methods to manipulate them.
 We also made a minor improvement to methods going over all extensions. They now use a for-each (over the private list) rather than an indexed for-loop and the public 'getExtension(i)'. The order will be preserved so the behavior is the same.
 patterns: factory?, proxy for extension list
 \subsubsection{org.parosproxy.paros.core.proxy.ProxyThread}
