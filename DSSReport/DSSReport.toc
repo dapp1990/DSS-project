@@ -2,7 +2,7 @@
 \contentsline {section}{\numberline {1}Design decisions}{2}{section.1}
 \contentsline {subsection}{\numberline {1.1}Iteration 1 \& 2: Image Filtering}{2}{subsection.1.1}
 \contentsline {subsection}{\numberline {1.2}Iteration 3: Content Filtering}{2}{subsection.1.2}
-\contentsline {subsection}{\numberline {1.3}Iteration 4: Content Reporting}{3}{subsection.1.3}
+\contentsline {subsection}{\numberline {1.3}Iteration 4: Content Reporting}{2}{subsection.1.3}
 \contentsline {subsection}{\numberline {1.4}Iteration 5: Refactoring}{3}{subsection.1.4}
 \contentsline {subsubsection}{\numberline {1.4.1}org.parosproxy.paros.core.proxy.ExtensionLoader}{3}{subsubsection.1.4.1}
 \contentsline {subsubsection}{\numberline {1.4.2}org.parosproxy.paros.core.proxy.ProxyThread}{3}{subsubsection.1.4.2}
