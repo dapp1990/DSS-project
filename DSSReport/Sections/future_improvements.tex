@@ -4,3 +4,5 @@
 The current implementation does not allow the final user to select the specific image statistic type in the report. Next improvement considers a GUI implementation using the \textit{hook} abstract method provide by \textit{ExtensionAdaptor}. \textit{ImageStatisticsFactory} can be adapted to add those responsibilities: keep tracking the final user image statistic type selections and instantiating/removing the corresponding ImageStatistics classes in runtime.
 
 \subsection{Iteration 5: Refactoring}
+\subsubsection{org.parosproxy.paros.core.proxy.ExtensionLoader}
+\textit{ExtensionList}should take over more functionality for the encapsulated list and map. This will require some careful redesigning of the classes, other than \textit{ExtensionLoader}, previously accessing the extensions.
