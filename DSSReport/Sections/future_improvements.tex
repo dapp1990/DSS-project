@@ -1,11 +1,14 @@
 \subsection{Iteration 1 \& 2: Image Filtering}
-A proposed improvement is adding input fields (potentially a tuple <priority, filterType>) in the \textit{FilterReplaceImage} in order to do the configuration using the GUI provided by zaproxy. \textit{ConfigurationReader} now is updated to a new factory class which creates and removes instances of \textit{SimpleImageFilter} according with the final user configuration. The configuration file is no longer need, therefore the coupling in the name classes disappears.
 
-\textit{Configurationreader} could be equipped with a richer parsing mechanism that would have an error margin on the parsed names, for example: case insensitivity and trimming.
+
+\textit{Configurationreader} could be equipped with a richer parsing mechanism that would have an error margin on the parsed names, for example: case insensitivity and trimming. This example would take 1 hour. An advanced parser would take another 2 hours.
+\par
+Instead, we could improve by adding input fields (potentially a tuple <priority, filterType>) in the \textit{FilterReplaceImage} in order to do the configuration using the GUI provided by zaproxy. The configuration file would no longer be needed, but reflection remains, so names must still be handled with care. This would take 10 hours to implement.
 \subsection{Iteration 3: Content Filtering}
+An alternative with lower coupling in \textit{FilterApplyer} would be by sending a closure from one class to the next one and never returning results. \textit{FilterApplyer} would no longer collect everything but would simply pass on the filter method with 2 missing arguments. This should take 5 hours to implement well.
 \subsection{Iteration 4: Content Reporting}
-The current implementation does not allow the final user to select the specific image statistic type in the report. Next improvement considers a GUI implementation using the \textit{hook} abstract method provide by \textit{ExtensionAdaptor}. \textit{ImageStatisticsFactory} can be adapted to add those responsibilities: keep tracking the final user image statistic type selections and instantiating/removing the corresponding ImageStatistics classes in runtime.
+The current implementation does not allow the final user to select the specific image statistic type in the report. Next improvement considers a GUI implementation using the \textit{hook} abstract method provide by \textit{ExtensionAdaptor}. \textit{ImageStatisticsFactory} can be adapted to add those responsibilities: keep tracking the final user image statistic type selections and instantiating/removing the corresponding \textit{ImageStatistics} classes in runtime. This would take 10 hours.
 
 \subsection{Iteration 5: Refactoring}
 \subsubsection{org.parosproxy.paros.core.proxy.ExtensionLoader}
-\textit{ExtensionList}should take over more functionality for the encapsulated list and map. This will require some careful redesigning of the classes, other than \textit{ExtensionLoader}, previously accessing the extensions.
+\textit{ExtensionList} should take over more functionality for the encapsulated list and map. This will require some careful redesigning of the classes, other than \textit{ExtensionLoader}, previously accessing the extensions. This would take 5 hours.
