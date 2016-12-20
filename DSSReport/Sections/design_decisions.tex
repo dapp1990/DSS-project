@@ -1,8 +1,10 @@
 \subsection{Iteration 1 \& 2: Image Filtering}
-
+For iteration 1 and 2, we added a zap filter by extending \textit{FilterAdaptor}. The subclass is \textit{FilterReplaceImage} and overrides the textit{onHttpResponseReceive} method. \textit{FilterAdaptor}. \textit{FilterReplaceImage} extracts the \textit{BufferedImage} from the \textit{HttpMessage}. It finds all the filter operations to apply and passes the \textit{BufferedImage} on to each of them in turn to be modified.
+The actual filters are subclasses of \textit{SimpleImageFilter}. The \textit{ConfigurationReader} finds them, given the url of the config file.
 
 \subsection{Iteration 3: Content Filtering}
 We separated the distinct responsibilities among several (object) classes. \textit{FilterHttpContent} is the link to the restof ZAP. It extends \textit{FilterAdaptor} in the parosproxy filter package. Upon receiving an HTTP response, it only verifies the \textit{HttpMessage} has content. Then it instantiates a \textit{FilterApplyer} (concrete subclass) and calls one of its filtering methods with 2 parameters. Currently only one is available, but other methods can be added to offer various filtering algorithms. The 2 parameters are the \textit{HttpMessage} and the url of the file containing the filter terms and additional info.
+\par
 The \textit{FilterApplyer} then instantiates 2 helpers. One, a \textit{PageContent}, represents a given (upon creation) \textit{HttpMessage}'s content. Subclasses provide the content with the desired type, \textit{String} for the assignment. The other, a \textit{FormatFileToFilterInfo}, parses the file at given url and returns the useful information. Currently only one parsing method is available, that supports the format of the assignment and returns a \textit{Pair}. This pair consists of the weight threshold and a list of \textit{InappropriateElement} instances. \textit{InappropriateElement} models inappropriate content, of generic type, its weight and explanatory tags. To support different formats, other parsing methods can be added.
 Next, the \textit{FilterApplyer} combines both result and filters the content using the found inappropriate elements.
 An alternative with lower coupling would be by sending a closure from one class to the next one and never returning results.
