@@ -1,6 +1,4 @@
 \subsection{Iteration 1 \& 2: Image Filtering}
-Concrete \textit{SimpleImageFilter}  is highly coupled to the configuration file because of the name classes and \textit{ConfigurationReader} relies completely in the configuration file’s correctness.
-
 The \textit{ConfigurationLoader} parses concrete \textit{SimpleImageFilters} from the config file by using reflection. This strictly requires the config files to contain exactly the class names of the needed filters.
 \subsection{Iteration 3: Content Filtering}
 The \textit{FilterApplyer} has a relatively high coupling: with \textit{HttpMessage} as well as both helpers. This is due to its coordinating role in addition to the filtering, which also indicates cohesion can be improved.
