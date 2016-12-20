@@ -20,6 +20,9 @@ It was created a new package to be consistent with the naming that zaproxy has. 
 This \textit{ExtensionImageReport} was implemented as core functionality since the given XML format to the ReportExtension relies on XSL style sheets to add the new information in HTML and MarkDown reports thus those corresponding XSL files were properly updated.
 
 \subsection{Iteration 5: Refactoring}
+We first tackled the rampant code duplication in  the \textit{ExtensionLoader} class. Most of the time, we used Java 8's support for lambda expressions and closures: \textit{Function<T1, T2>} and \textit{Consumer<T>} (for void methods).
+We also made a minor improvement to methods going over all extensions. They now use a for-each (over the private list) rather than an indexed for-loop and the public 'getExtension(i)'. The order will be preserved so the behavior is the same.
+patterns: factory?, proxy for extension list
 \subsubsection{org.parosproxy.paros.core.proxy.ProxyThread}
 
 \textit{Response} was created to handle the errors messages while\textit{notification} package was created to delegate all the notification method used in \textit{ProxyThread}. Due to the similarity in the algorithm, it was implemented using an abstract template class and the internal behavior was implemented in the concrete classes.
