@@ -10,7 +10,9 @@ Due to the high cohesion, the classes are easy to understand and modify. Support
 The extension is encapsulated in its package and relies in the interfaces provides by zaproxy. Due to the Strategy pattern applied for the image statistics, developers can create new concrete classes either using the template class or implementing a new one. Developers can select specific image statistics types via the \textit{ImageStatisticsFactory}.
 
 \subsection{Iteration 5: Refactoring}
-
+\subsubsection{org.parosproxy.paros.core.proxy.ProxyThread}
+The removal of copied code makes it easy to update common operations, such as the \textit{notifyEvent} private method.
+\textit{ExtensionLoader} is now easier to understand, as it has higher cohesion. It is also practical to work in one of its components when only this functionality needs to be updated.
 \subsubsection{org.parosproxy.paros.core.proxy.ProxyThread}
 
 Due to the template class \textit{ProxyListenerNotifier}, developers can create new notification method using the concrete class without affecting the behavior of the others. The \textit{notification} package can also be reused in other parts of the code since it does not depends on \textit{ProxyThread}. 
